@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Welcome to MoodSensei Dashboard!</h1>
+  <p>Select your mood:</p>
+  <button onclick="handleMood('happy')">😊 Happy</button>
+  <button onclick="handleMood('sad')">😢 Sad</button>
+
+  <script>
+    function handleMood(mood) {
+      if (mood === "happy") {
+        alert("You're happy! You may proceed.");
+      } else {
+        alert("You seem sad. Redirecting you to the game zone...");
+        window.location.href = "https://www.crazygames.com";
+      }
+    }
+  </script>
+</body>
+</html>
