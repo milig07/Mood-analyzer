@@ -9,7 +9,7 @@ app.use(express.static('public'));
 
 // Serve homepage
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+  res.sendFile(path.join(__dirname, 'views', 'homepage.html'));
 });
 
 // Signup route
@@ -24,7 +24,7 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ where: { username, password } });
   if (user) {
-    res.redirect('/mood.html');
+    res.redirect('/dashboard.html');
   } else {
     res.send('Invalid credentials');
   }

@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Mood Selector</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to MoodSensei Dashboard!</h1>
-  <p>Select your mood:</p>
-  <button onclick="handleMood('happy')">😊 Happy</button>
-  <button onclick="handleMood('sad')">😢 Sad</button>
+  <h1>How are you feeling today?</h1>
+
+  <form id="moodForm">
+    <label><input type="radio" name="mood" value="happy" required> Happy</label><br>
+    <label><input type="radio" name="mood" value="sad"> Sad</label><br>
+    <label><input type="radio" name="mood" value="angry"> Angry</label><br>
+    <button type="submit">Submit</button>
+  </form>
 
   <script>
-    function handleMood(mood) {
-      if (mood === "happy") {
+    document.getElementById('moodForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const mood = document.querySelector('input[name="mood"]:checked').value;
+      
+      if (mood === 'happy') {
         alert("You're happy! You may proceed.");
+        // Redirect to your main dashboard or success page
+        window.location.href = "/dashboard.html";
       } else {
-        alert("You seem sad. Redirecting you to the game zone...");
-        window.location.href = "https://www.crazygames.com";
+        alert("You seem " + mood + ". Taking you to fun zone!");
+        window.location.href = "https://www.crazygames.com"; // or your game zone
       }
-    }
+    });
   </script>
 </body>
 </html>
