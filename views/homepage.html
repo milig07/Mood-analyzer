@@ -1,31 +1,969 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MoodSensei</title>
-  <link rel="stylesheet" href="/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodAnalyzer - Track Your Emotions & Mental Wellness</title>
+    <meta name="description" content="Discover patterns in your emotions with MoodAnalyzer - the fun and intuitive mood tracking app for better mental health.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Comic Sans MS", "Marker Felt", "Trebuchet MS", cursive, sans-serif;
+            background: linear-gradient(135deg, #fefce8, #fdf2f8, #faf5ff);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Doodle Animations */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-2deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(2deg); }
+            75% { transform: rotate(-1deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(2deg); }
+            66% { transform: translateY(8px) rotate(-1deg); }
+        }
+
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.08); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 5px rgba(244, 114, 182, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 25px rgba(244, 114, 182, 0.8), 0 0 35px rgba(168, 85, 247, 0.6);
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-3px) rotate(-1deg); }
+            75% { transform: translateX(3px) rotate(1deg); }
+        }
+
+        @keyframes draw-line {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(-100%) scale(0.8); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .doodle-font {
+            font-family: "Comic Sans MS", "Marker Felt", "Trebuchet MS", cursive, sans-serif;
+            font-weight: 600;
+        }
+
+        .wiggle { animation: wiggle 4s ease-in-out infinite; }
+        .float { animation: float 5s ease-in-out infinite; }
+        .bounce-gentle { animation: bounce-gentle 3s ease-in-out infinite; }
+        .pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+        .sketchy-shadow {
+            filter: drop-shadow(4px 4px 0px rgba(244, 114, 182, 0.4)) 
+                    drop-shadow(-2px -2px 0px rgba(168, 85, 247, 0.3))
+                    drop-shadow(2px 6px 0px rgba(251, 191, 36, 0.2));
+        }
+
+        .doodle-border {
+            border: 4px dashed #f472b6;
+            border-radius: 20px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .doodle-border::before {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 3px dotted #a855f7;
+            border-radius: 23px;
+            opacity: 0.7;
+        }
+
+        .doodle-border::after {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 26px;
+            opacity: 0.5;
+        }
+
+        .doodle-circle {
+            border-radius: 50%;
+            border: 4px dashed #f472b6;
+            position: relative;
+        }
+
+        .doodle-circle::before {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 3px dotted #a855f7;
+            border-radius: 50%;
+            animation: wiggle 5s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        /* Enhanced Button Styles */
+        .doodle-btn {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none;
+            font-family: inherit;
+        }
+
+        .doodle-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .doodle-btn:hover::before {
+            left: 100%;
+        }
+
+        .doodle-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Sparkle Effect */
+        .sparkle {
+            position: relative;
+        }
+
+        .sparkle::after {
+            content: "✨";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 16px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        /* Paper Texture Enhancement */
+        .paper-texture {
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.2) 1px, transparent 0),
+                radial-gradient(circle at 15px 15px, rgba(244, 114, 182, 0.08) 1px, transparent 0),
+                radial-gradient(circle at 25px 5px, rgba(168, 85, 247, 0.05) 1px, transparent 0);
+            background-size: 20px 20px, 30px 30px, 40px 40px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 245, 255, 0.95));
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 25px;
+            animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: #6b7280;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        /* Form Styles */
+        .signup-form {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 3px dashed #f472b6;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: inherit;
+            font-size: 16px;
+            color: #374151;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #a855f7;
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .mood-select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 3px dashed #f472b6;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: inherit;
+            font-size: 16px;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mood-select:focus {
+            outline: none;
+            border-color: #a855f7;
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+
+        .mood-option {
+            padding: 12px;
+            font-family: inherit;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #f472b6, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: inherit;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: rotate(-1deg);
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: rotate(0deg) scale(1.05);
+            background: linear-gradient(45deg, #ec4899, #9333ea);
+        }
+
+        .submit-btn:active {
+            transform: rotate(0deg) scale(0.98);
+        }
+
+        .login-link {
+            margin-top: 24px;
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        .login-link a {
+            color: #a855f7;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #f472b6;
+            text-decoration: underline;
+        }
+
+        /* Mood Emoji Indicators */
+        .mood-emoji {
+            font-size: 24px;
+            margin-right: 8px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .mood-select:focus + .mood-emoji,
+        .mood-select:hover + .mood-emoji {
+            transform: scale(1.2) rotate(10deg);
+        }
+    </style>
 </head>
-<body>
-  <h1>Welcome to MoodSensei</h1>
+<body class="paper-texture">
+    <!-- Sign Up Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content doodle-border sketchy-shadow">
+            <span class="close" onclick="closeSignupModal()">&times;</span>
+            
+            <div class="signup-form">
+                <!-- Header -->
+                <div style="margin-bottom: 32px;">
+                    <div class="doodle-circle pulse-glow" style="width: 80px; height: 80px; background: linear-gradient(45deg, #f472b6, #a855f7); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; transform: rotate(10deg);">
+                        <span class="wiggle" style="font-size: 40px;">🎉</span>
+                    </div>
+                    <h2 class="doodle-font" style="font-size: 32px; color: #374151; margin-bottom: 8px; transform: rotate(-1deg);">
+                        Join MoodAnalyzer!
+                    </h2>
+                    <p class="doodle-font" style="color: #6b7280; font-size: 16px;">
+                        Start your journey to better mental wellness today ✨
+                    </p>
+                </div>
 
-  <form id="moodForm">
-    <label for="username">Enter your name:</label>
-    <input type="text" id="username" required />
+                <!-- Sign Up Form -->
+                <form action="/signup" method="POST" style="text-align: left;">
+                    <div class="form-group">
+                        <label for="username" class="doodle-font">
+                            👤 Username
+                        </label>
+                        <input 
+                            type="text" 
+                            id="username"
+                            name="username" 
+                            class="form-input doodle-font" 
+                            placeholder="Choose your unique username" 
+                            required 
+                        />
+                    </div>
 
-    <label for="mood">How are you feeling?</label>
-    <select id="mood">
-      <option value="happy">Happy</option>
-      <option value="sad">Sad</option>
-      <option value="angry">Angry</option>
-      <option value="neutral">Neutral</option>
-    </select>
-    
+                    <div class="form-group">
+                        <label for="password" class="doodle-font">
+                            🔒 Password
+                        </label>
+                        <input 
+                            type="password" 
+                            id="password"
+                            name="password" 
+                            class="form-input doodle-font" 
+                            placeholder="Create a secure password" 
+                            required 
+                        />
+                    </div>
 
+                    <div class="form-group">
+                        <label for="mood" class="doodle-font">
+                            😊 How are you feeling today?
+                        </label>
+                        <select name="mood" id="mood" class="mood-select doodle-font">
+                            <option value="happy" class="mood-option">😊 Happy - Feeling great and positive!</option>
+                            <option value="sad" class="mood-option">😢 Sad - Going through a tough time</option>
+                            <option value="angry" class="mood-option">😠 Angry - Feeling frustrated or upset</option>
+                            <option value="neutral" class="mood-option">😐 Neutral - Just an ordinary day</option>
+                            <option value="excited" class="mood-option">🤩 Excited - Can't contain my enthusiasm!</option>
+                            <option value="anxious" class="mood-option">😰 Anxious - Feeling worried or nervous</option>
+                            <option value="grateful" class="mood-option">🙏 Grateful - Appreciating life's blessings</option>
+                        </select>
+                    </div>
 
-    <button type="submit">Submit</button>
-  </form>
+                    <button type="submit" class="submit-btn doodle-font sketchy-shadow sparkle">
+                        Create My Account 🚀
+                    </button>
+                </form>
 
-  
-</body>
-</html>
+                <div class="login-link doodle-font">
+                    Already have an account? 
+                    <a href="#" onclick="openLoginModal(); closeSignupModal();">Login here</a>
+                </div>
+
+                <!-- Trust Indicators -->
+                <div style="margin-top: 24px; padding-top: 24px; border-top: 2px dashed rgba(244, 114, 182, 0.3);">
+                    <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #6b7280;">
+                        <div class="doodle-font" style="display: flex; align-items: center; gap: 6px;">
+                            <span>🔒</span> 100% Private
+                        </div>
+                        <div class="doodle-font" style="display: flex; align-items: center; gap: 6px;">
+                            <span>💝</span> Free Forever
+                        </div>
+                        <div class="doodle-font" style="display: flex; align-items: center; gap: 6px;">
+                            <span>⚡</span> Instant Setup
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal (Placeholder) -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content doodle-border sketchy-shadow">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            
+            <div class="signup-form">
+                <div style="margin-bottom: 32px;">
+                    <div class="doodle-circle pulse-glow" style="width: 80px; height: 80px; background: linear-gradient(45deg, #34d399, #14b8a6); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; transform: rotate(-10deg);">
+                        <span class="wiggle" style="font-size: 40px;">👋</span>
+                    </div>
+                    <h2 class="doodle-font" style="font-size: 32px; color: #374151; margin-bottom: 8px; transform: rotate(1deg);">
+                        Welcome Back!
+                    </h2>
+                    <p class="doodle-font" style="color: #6b7280; font-size: 16px;">
+                        Continue your mood tracking journey 🌈
+                    </p>
+                </div>
+
+                <form action="/login" method="POST" style="text-align: left;">
+                    <div class="form-group">
+                        <label for="login-username" class="doodle-font">👤 Username</label>
+                        <input type="text" id="login-username" name="username" class="form-input doodle-font" placeholder="Enter your username" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password" class="doodle-font">🔒 Password</label>
+                        <input type="password" id="login-password" name="password" class="form-input doodle-font" placeholder="Enter your password" required />
+                    </div>
+
+                    <button type="submit" class="submit-btn doodle-font sketchy-shadow">
+                        Login to My Account 🎯
+                    </button>
+                </form>
+
+                <div class="login-link doodle-font">
+                    Don't have an account? 
+                    <a href="#" onclick="openSignupModal(); closeLoginModal();">Sign up here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Header with Mobile Menu -->
+    <header style="padding: 24px 0; position: sticky; top: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); z-index: 100;">
+        <div class="container">
+            <nav style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="doodle-circle pulse-glow sparkle" style="width: 50px; height: 50px; background: linear-gradient(45deg, #f472b6, #a855f7); display: flex; align-items: center; justify-content: center; transform: rotate(15deg);">
+                        <span class="wiggle" style="font-size: 28px;">😊</span>
+                    </div>
+                    <div>
+                        <h1 class="doodle-font" style="font-size: 28px; color: #374151; transform: rotate(-1deg); position: relative; margin: 0;">
+                            MoodAnalyzer
+                            <span style="position: absolute; bottom: -8px; left: 0; height: 4px; background: repeating-linear-gradient(45deg, #f472b6, #f472b6 4px, transparent 4px, transparent 8px); border-radius: 2px; transform: rotate(-1deg); animation: draw-line 2s ease-out;"></span>
+                        </h1>
+                        <p style="font-size: 12px; color: #6b7280; margin: 0; transform: rotate(1deg);">Track • Analyze • Improve</p>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div id="desktop-nav" style="display: flex; gap: 32px; align-items: center;">
+                    <a href="#features" class="doodle-font" style="color: #6b7280; text-decoration: none; font-weight: 500; transition: all 0.3s; position: relative;" onmouseover="this.style.color='#a855f7'; this.style.animation='shake 0.5s ease-in-out';" onmouseout="this.style.color='#6b7280'; this.style.animation='';">
+                        Features
+                    </a>
+                    <a href="#how-it-works" class="doodle-font" style="color: #6b7280; text-decoration: none; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.color='#a855f7'; this.style.animation='shake 0.5s ease-in-out';" onmouseout="this.style.color='#6b7280'; this.style.animation='';">How It Works</a>
+                    <a href="#developer" class="doodle-font" style="color: #6b7280; text-decoration: none; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.color='#a855f7'; this.style.animation='shake 0.5s ease-in-out';" onmouseout="this.style.color='#6b7280'; this.style.animation='';">Developer</a>
+                    
+                    <!-- Login Button -->
+                    <button onclick="openLoginModal()" class="doodle-btn doodle-font" style="background: rgba(255, 255, 255, 0.9); color: #374151; border: 2px dashed #a855f7; padding: 10px 20px; border-radius: 20px; font-weight: 600; transform: rotate(1deg);" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'; this.style.background='rgba(168, 85, 247, 0.1)'" onmouseout="this.style.transform='rotate(1deg) scale(1)'; this.style.background='rgba(255, 255, 255, 0.9)'">
+                        Login
+                    </button>
+                    
+                    <!-- Sign Up Button -->
+                    <button onclick="openSignupModal()" class="doodle-btn doodle-font sketchy-shadow" style="background: linear-gradient(45deg, #f472b6, #a855f7); color: white; padding: 14px 28px; border-radius: 30px; font-weight: 700; transform: rotate(-1deg);" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'" onmouseout="this.style.transform='rotate(-1deg) scale(1)'">
+                        Sign Up Free
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="doodle-btn" style="display: none; background: linear-gradient(45deg, #f472b6, #a855f7); color: white; padding: 12px; border-radius: 50%; font-size: 20px;" onclick="toggleMobileMenu()">☰</button>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" style="display: none; margin-top: 20px; padding: 20px; background: rgba(255, 255, 255, 0.95); border-radius: 15px; border: 3px dashed #f472b6;">
+                <a href="#features" class="doodle-font" style="display: block; color: #6b7280; text-decoration: none; padding: 10px 0; border-bottom: 1px dotted #e5e7eb;">Features</a>
+                <a href="#how-it-works" class="doodle-font" style="display: block; color: #6b7280; text-decoration: none; padding: 10px 0; border-bottom: 1px dotted #e5e7eb;">How It Works</a>
+                <a href="#developer" class="doodle-font" style="display: block; color: #6b7280; text-decoration: none; padding: 10px 0; border-bottom: 1px dotted #e5e7eb;">Developer</a>
+                <button onclick="openLoginModal()" class="doodle-btn doodle-font" style="width: 100%; margin-top: 15px; background: rgba(168, 85, 247, 0.1); color: #a855f7; border: 2px dashed #a855f7; padding: 12px; border-radius: 25px; font-weight: 600;">Login</button>
+                <button onclick="openSignupModal()" class="doodle-btn doodle-font" style="width: 100%; margin-top: 10px; background: linear-gradient(45deg, #f472b6, #a855f7); color: white; padding: 12px; border-radius: 25px; font-weight: 600;">Sign Up Free</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Enhanced Hero Section -->
+    <section style="padding: 80px 0; text-align: center; position: relative;">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto;">
+                <!-- Hero Badge -->
+                <div class="doodle-border bounce-gentle" style="display: inline-block; padding: 8px 20px; margin-bottom: 24px; background: linear-gradient(45deg, rgba(244, 114, 182, 0.1), rgba(168, 85, 247, 0.1)); transform: rotate(-2deg);">
+                    <span class="doodle-font" style="color: #a855f7; font-size: 14px; font-weight: 600;">🎉 #1 Mood Tracking App</span>
+                </div>
+
+                <h2 class="doodle-font" style="font-size: clamp(52px, 10vw, 110px); font-weight: bold; color: #374151; margin-bottom: 32px; transform: rotate(-1deg); line-height: 1.1;">
+                    Track Your
+                    <span style="background: linear-gradient(45deg, #f472b6, #a855f7, #fbbf24, #34d399); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradient-shift 4s ease infinite; display: inline-block; margin-left: 20px;" class="wiggle">Mood</span>
+                    <br>
+                    <span style="font-size: 0.7em; color: #6b7280;">& Transform Your Life</span>
+                </h2>
+
+                <p class="doodle-font" style="font-size: 22px; color: #6b7280; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; transform: rotate(0.5deg);">
+                    Discover patterns in your emotions, understand your mental health better, and build happier habits with our fun and intuitive mood tracking app! 🌈✨
+                </p>
+
+                <!-- CTA Buttons -->
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
+                    <button onclick="openSignupModal()" class="doodle-btn doodle-font sketchy-shadow sparkle" style="background: linear-gradient(45deg, #fbbf24, #f97316); color: white; padding: 18px 36px; border-radius: 50px; font-weight: bold; font-size: 20px; transform: rotate(-2deg);" onmouseover="this.style.transform='rotate(0deg) scale(1.08)'" onmouseout="this.style.transform='rotate(-2deg) scale(1)'">
+                        Start Tracking Free! 🚀
+                    </button>
+                    <button class="doodle-btn doodle-font" style="background: rgba(255, 255, 255, 0.9); color: #374151; border: 3px dashed #f472b6; padding: 18px 36px; border-radius: 50px; font-weight: bold; font-size: 18px; transform: rotate(1deg);" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'; this.style.background='rgba(244, 114, 182, 0.1)'" onmouseout="this.style.transform='rotate(1deg) scale(1)'; this.style.background='rgba(255, 255, 255, 0.9)'">
+                        Watch Demo 📱
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 40px;">
+                    <div class="doodle-font" style="text-align: center; transform: rotate(-1deg);">
+                        <div style="font-size: 32px; font-weight: bold; color: #f472b6;">50K+</div>
+                        <div style="font-size: 14px; color: #6b7280;">Happy Users</div>
+                    </div>
+                    <div class="doodle-font" style="text-align: center; transform: rotate(1deg);">
+                        <div style="font-size: 32px; font-weight: bold; color: #a855f7;">4.9★</div>
+                        <div style="font-size: 14px; color: #6b7280;">App Rating</div>
+                    </div>
+                    <div class="doodle-font" style="text-align: center; transform: rotate(-0.5deg);">
+                        <div style="font-size: 32px; font-weight: bold; color: #34d399;">1M+</div>
+                        <div style="font-size: 14px; color: #6b7280;">Moods Tracked</div>
+                    </div>
+                </div>
+
+                <!-- Floating Elements -->
+                <div style="position: relative;">
+                    <div class="float" style="position: absolute; top: -40px; left: -40px; font-size: 40px; z-index: -1;">😊</div>
+                    <div class="float" style="position: absolute; top: -20px; right: -60px; font-size: 32px; animation-delay: -1s; z-index: -1;">💝</div>
+                    <div class="float" style="position: absolute; bottom: -30px; left: 60px; font-size: 28px; animation-delay: -2s; z-index: -1;">🌟</div>
+                    <div class="float" style="position: absolute; top: 20px; right: 20px; font-size: 24px; animation-delay: -0.5s; z-index: -1;">🎯</div>
+                    <div class="float" style="position: absolute; bottom: 10px; right: -20px; font-size: 20px; animation-delay: -1.5s; z-index: -1;">💪</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Separator -->
+    <div style="height: 6px; background: repeating-linear-gradient(90deg, #a855f7, #a855f7 15px, #f472b6 15px, #f472b6 30px, #fbbf24 30px, #fbbf24 45px, #34d399 45px, #34d399 60px); margin: 40px auto; max-width: 300px; border-radius: 3px; transform: rotate(-1deg); box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);"></div>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" style="padding: 80px 0; background: rgba(255, 255, 255, 0.5);">
+        <div class="container">
+            <h3 class="doodle-font" style="font-size: 52px; font-weight: bold; text-align: center; color: #374151; margin-bottom: 60px; transform: rotate(1deg); position: relative;">
+                How It Works 🔄
+                <span style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%) rotate(-1deg); width: 60%; height: 5px; background: repeating-linear-gradient(45deg, #f472b6, #f472b6 4px, transparent 4px, transparent 8px); border-radius: 3px;"></span>
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1000px; margin: 0 auto;">
+                <!-- Step 1 -->
+                <div class="doodle-border sketchy-shadow" style="padding: 32px; text-align: center; transform: rotate(-1deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);" onmouseover="this.style.transform='rotate(0deg) scale(1.05) translateY(-8px)'" onmouseout="this.style.transform='rotate(-1deg) scale(1) translateY(0)'">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #fbbf24, #f97316); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; transform: rotate(10deg);" class="bounce-gentle">📝</div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">1. Sign Up & Log Mood</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6;">Create your account and start with quick daily check-ins using colorful emojis, notes, and mood intensity levels.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="doodle-border sketchy-shadow" style="padding: 32px; text-align: center; transform: rotate(1deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);" onmouseover="this.style.transform='rotate(0deg) scale(1.05) translateY(-8px)'" onmouseout="this.style.transform='rotate(1deg) scale(1) translateY(0)'">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #60a5fa, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; transform: rotate(-10deg);" class="bounce-gentle">📊</div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">2. Analyze Patterns</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6;">AI-powered insights reveal trends, triggers, and correlations in your emotional journey.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="doodle-border sketchy-shadow" style="padding: 32px; text-align: center; transform: rotate(-0.5deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);" onmouseover="this.style.transform='rotate(0deg) scale(1.05) translateY(-8px)'" onmouseout="this.style.transform='rotate(-0.5deg) scale(1) translateY(0)'">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #34d399, #14b8a6); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; transform: rotate(5deg);" class="bounce-gentle">🎯</div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">3. Improve Daily</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6;">Get personalized recommendations and build healthy habits for better mental wellness.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Features Section -->
+    <section id="features" style="padding: 80px 0;">
+        <div class="container">
+            <h3 class="doodle-font" style="font-size: 52px; font-weight: bold; text-align: center; color: #374151; margin-bottom: 60px; transform: rotate(1deg); position: relative;">
+                Why You'll Love It! 💕
+                <span style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%) rotate(-1deg); width: 70%; height: 5px; background: repeating-linear-gradient(45deg, #f472b6, #f472b6 4px, transparent 4px, transparent 8px); border-radius: 3px;"></span>
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+                <!-- Enhanced Feature Cards -->
+                <div class="doodle-border sketchy-shadow sparkle" style="padding: 32px; text-align: center; transform: rotate(2deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); cursor: pointer;" onmouseover="this.style.transform='rotate(0deg) scale(1.08) translateY(-10px)'" onmouseout="this.style.transform='rotate(2deg) scale(1) translateY(0)'">
+                    <div class="doodle-circle bounce-gentle" style="width: 80px; height: 80px; background: linear-gradient(45deg, #f472b6, #ef4444); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; transform: rotate(-15deg);">
+                        <span style="font-size: 40px; color: white;">❤</span>
+                    </div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">Smart Mood Tracking</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; margin-bottom: 16px;">Log emotions with emojis, voice notes, photos, and detailed context for comprehensive tracking.</p>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="background: rgba(244, 114, 182, 0.2); color: #be185d; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Voice Notes</span>
+                        <span style="background: rgba(244, 114, 182, 0.2); color: #be185d; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Photo Diary</span>
+                    </div>
+                </div>
+
+                <div class="doodle-border sketchy-shadow sparkle" style="padding: 32px; text-align: center; transform: rotate(-1deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); cursor: pointer;" onmouseover="this.style.transform='rotate(0deg) scale(1.08) translateY(-10px)'" onmouseout="this.style.transform='rotate(-1deg) scale(1) translateY(0)'">
+                    <div class="doodle-circle bounce-gentle" style="width: 80px; height: 80px; background: linear-gradient(45deg, #60a5fa, #a855f7); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; transform: rotate(15deg);">
+                        <span style="font-size: 40px; color: white;">📈</span>
+                    </div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">AI-Powered Analytics</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; margin-bottom: 16px;">Advanced insights reveal patterns, predict mood changes, and identify triggers automatically.</p>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="background: rgba(168, 85, 247, 0.2); color: #7c3aed; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Predictions</span>
+                        <span style="background: rgba(168, 85, 247, 0.2); color: #7c3aed; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Triggers</span>
+                    </div>
+                </div>
+
+                <div class="doodle-border sketchy-shadow sparkle" style="padding: 32px; text-align: center; transform: rotate(1deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); cursor: pointer;" onmouseover="this.style.transform='rotate(0deg) scale(1.08) translateY(-10px)'" onmouseout="this.style.transform='rotate(1deg) scale(1) translateY(0)'">
+                    <div class="doodle-circle bounce-gentle" style="width: 80px; height: 80px; background: linear-gradient(45deg, #34d399, #14b8a6); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; transform: rotate(-8deg);">
+                        <span style="font-size: 40px; color: white;">👥</span>
+                    </div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">Supportive Community</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; margin-bottom: 16px;">Connect with others, share experiences, and get support from mental health professionals.</p>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="background: rgba(52, 211, 153, 0.2); color: #047857; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Forums</span>
+                        <span style="background: rgba(52, 211, 153, 0.2); color: #047857; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Expert Help</span>
+                    </div>
+                </div>
+
+                <div class="doodle-border sketchy-shadow sparkle" style="padding: 32px; text-align: center; transform: rotate(-2deg); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); cursor: pointer;" onmouseover="this.style.transform='rotate(0deg) scale(1.08) translateY(-10px)'" onmouseout="this.style.transform='rotate(-2deg) scale(1) translateY(0)'">
+                    <div class="doodle-circle bounce-gentle" style="width: 80px; height: 80px; background: linear-gradient(45deg, #fbbf24, #f97316); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; transform: rotate(8deg);">
+                        <span style="font-size: 40px; color: white;">🏆</span>
+                    </div>
+                    <h4 class="doodle-font" style="font-size: 24px; font-weight: bold; color: #374151; margin-bottom: 12px;">Gamified Progress</h4>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; margin-bottom: 16px;">Unlock achievements, earn badges, and celebrate milestones in your mental wellness journey.</p>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="background: rgba(251, 191, 36, 0.2); color: #d97706; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Badges</span>
+                        <span style="background: rgba(251, 191, 36, 0.2); color: #d97706; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;">Streaks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Separator -->
+    <div style="height: 6px; background: repeating-linear-gradient(90deg, #a855f7, #a855f7 15px, #f472b6 15px, #f472b6 30px, #fbbf24 30px, #fbbf24 45px, #34d399 45px, #34d399 60px); margin: 40px auto; max-width: 300px; border-radius: 3px; transform: rotate(-1deg); box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);"></div>
+
+    <!-- Enhanced Developer Section -->
+    <section id="developer" style="padding: 80px 0; background: rgba(255, 255, 255, 0.7);">
+        <div class="container">
+            <div style="max-width: 900px; margin: 0 auto;">
+                <h3 class="doodle-font" style="font-size: 52px; font-weight: bold; text-align: center; color: #374151; margin-bottom: 60px; transform: rotate(-1deg); position: relative;">
+                    Meet the Developer! 👋
+                    <span style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%) rotate(-1deg); width: 60%; height: 5px; background: repeating-linear-gradient(45deg, #f472b6, #f472b6 4px, transparent 4px, transparent 8px); border-radius: 3px;"></span>
+                </h3>
+
+                <div class="doodle-border sketchy-shadow" style="background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(250, 245, 255, 0.8)); backdrop-filter: blur(15px); padding: 40px; transform: rotate(1deg);">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                        <!-- Enhanced Developer Photo -->
+                        <div style="position: relative;">
+                            <div class="doodle-circle sketchy-shadow float" style="width: 220px; height: 220px; overflow: hidden; transform: rotate(-3deg); background: linear-gradient(45deg, #f472b6, #a855f7); padding: 8px;">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=220&h=220&fit=crop&crop=face" alt="Developer Photo - Alex Johnson" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: sepia(5%) saturate(110%) hue-rotate(2deg); transition: all 0.4s ease;" onmouseover="this.style.filter='sepia(0%) saturate(120%) hue-rotate(0deg)'; this.style.transform='scale(1.05)'" onmouseout="this.style.filter='sepia(5%) saturate(110%) hue-rotate(2deg)'; this.style.transform='scale(1)'">
+                            </div>
+                            <!-- Enhanced decorative emojis -->
+                            <div class="float sparkle" style="position: absolute; top: -20px; right: -20px; font-size: 32px;">✨</div>
+                            <div class="float" style="position: absolute; bottom: -10px; left: -20px; font-size: 28px; animation-delay: -1s;">🚀</div>
+                            <div class="float" style="position: absolute; top: 40%; left: -40px; font-size: 24px; animation-delay: -2s;">💡</div>
+                            <div class="float" style="position: absolute; top: 20%; right: -30px; font-size: 20px; animation-delay: -0.5s;">🎨</div>
+                        </div>
+
+                        <!-- Enhanced Developer Info -->
+                        <div style="text-align: center; max-width: 600px;">
+                            <h4 class="doodle-font" style="font-size: 42px; font-weight: bold; color: #374151; margin-bottom: 12px; transform: rotate(1deg); background: linear-gradient(45deg, #f472b6, #a855f7, #fbbf24, #34d399); background-size: 400% 400%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradient-shift 4s ease infinite;">
+                                Alex Johnson
+                            </h4>
+                            
+                            <div class="doodle-font sketchy-shadow wiggle sparkle" style="display: inline-block; background: linear-gradient(45deg, #f472b6, #a855f7); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; margin-bottom: 24px; transform: rotate(-1deg); font-size: 16px;">
+                                Full-Stack Developer & Mental Health Advocate
+                            </div>
+
+                            <!-- Skills Tags -->
+                            <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                                <span class="doodle-font" style="background: rgba(244, 114, 182, 0.15); color: #be185d; padding: 6px 12px; border-radius: 15px; font-size: 14px; font-weight: 600; border: 2px dashed rgba(244, 114, 182, 0.3);">React</span>
+                                <span class="doodle-font" style="background: rgba(168, 85, 247, 0.15); color: #7c3aed; padding: 6px 12px; border-radius: 15px; font-size: 14px; font-weight: 600; border: 2px dashed rgba(168, 85, 247, 0.3);">Node.js</span>
+                                <span class="doodle-font" style="background: rgba(52, 211, 153, 0.15); color: #047857; padding: 6px 12px; border-radius: 15px; font-size: 14px; font-weight: 600; border: 2px dashed rgba(52, 211, 153, 0.3);">AI/ML</span>
+                                <span class="doodle-font" style="background: rgba(251, 191, 36, 0.15); color: #d97706; padding: 6px 12px; border-radius: 15px; font-size: 14px; font-weight: 600; border: 2px dashed rgba(251, 191, 36, 0.3);">UX Design</span>
+                            </div>
+
+                            <p class="doodle-font" style="color: #6b7280; margin-bottom: 20px; line-height: 1.7; font-size: 18px;">
+                                Hey there! I'm Alex, a passionate developer who believes technology can make mental health more accessible. After struggling with my own mood tracking journey, I created MoodAnalyzer to help others understand their emotions better and build healthier habits.
+                            </p>
+
+                            <p style="color: #6b7280; margin-bottom: 32px; line-height: 1.6; font-family: 'Brush Script MT', 'Lucida Handwriting', cursive; font-style: italic; transform: rotate(-1deg); color: #a855f7; font-size: 20px; background: rgba(168, 85, 247, 0.05); padding: 16px; border-radius: 15px; border: 2px dashed rgba(168, 85, 247, 0.2);">
+                                "When I'm not coding, you'll find me hiking mountain trails, sketching in coffee shops, or experimenting with new recipes! ☕🏔🎨"
+                            </p>
+
+                            <!-- Enhanced Social Links -->
+                            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                                <button class="doodle-btn doodle-font sketchy-shadow" style="background: linear-gradient(45deg, #333, #555); color: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; transform: rotate(1deg); display: flex; align-items: center; gap: 10px;" onmouseover="this.style.transform='rotate(0deg) scale(1.08)'; this.style.background='linear-gradient(45deg, #f472b6, #a855f7)'" onmouseout="this.style.transform='rotate(1deg) scale(1)'; this.style.background='linear-gradient(45deg, #333, #555)'">
+                                    <span style="font-size: 20px;">🐙</span> GitHub
+                                </button>
+                                <button class="doodle-btn doodle-font sketchy-shadow" style="background: linear-gradient(45deg, #0077b5, #00a0dc); color: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; transform: rotate(-1deg); display: flex; align-items: center; gap: 10px;" onmouseover="this.style.transform='rotate(0deg) scale(1.08)'" onmouseout="this.style.transform='rotate(-1deg) scale(1)'">
+                                    <span style="font-size: 20px;">💼</span> LinkedIn
+                                </button>
+                                <button class="doodle-btn doodle-font sketchy-shadow" style="background: linear-gradient(45deg, #ea4335, #fbbc04); color: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; transform: rotate(2deg); display: flex; align-items: center; gap: 10px;" onmouseover="this.style.transform='rotate(0deg) scale(1.08)'" onmouseout="this.style.transform='rotate(2deg) scale(1)'">
+                                    <span style="font-size: 20px;">📧</span> Email
+                                </button>
+                                <button class="doodle-btn doodle-font sketchy-shadow" style="background: linear-gradient(45deg, #1da1f2, #14171a); color: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; transform: rotate(-0.5deg); display: flex; align-items: center; gap: 10px;" onmouseover="this.style.transform='rotate(0deg) scale(1.08)'" onmouseout="this.style.transform='rotate(-0.5deg) scale(1)'">
+                                    <span style="font-size: 20px;">🐦</span> Twitter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section style="padding: 80px 0;">
+        <div class="container">
+            <h3 class="doodle-font" style="font-size: 52px; font-weight: bold; text-align: center; color: #374151; margin-bottom: 60px; transform: rotate(-1deg); position: relative;">
+                What Users Say 💬
+                <span style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%) rotate(-1deg); width: 50%; height: 5px; background: repeating-linear-gradient(45deg, #f472b6, #f472b6 4px, transparent 4px, transparent 8px); border-radius: 3px;"></span>
+            </h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto;">
+                <!-- Testimonial 1 -->
+                <div class="doodle-border sketchy-shadow" style="padding: 28px; transform: rotate(1deg); transition: all 0.3s ease;" onmouseover="this.style.transform='rotate(0deg) scale(1.03)'" onmouseout="this.style.transform='rotate(1deg) scale(1)'">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #f472b6, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">👩</div>
+                        <div>
+                            <h5 class="doodle-font" style="font-size: 18px; font-weight: bold; color: #374151; margin: 0;">Sarah M.</h5>
+                            <div style="color: #fbbf24; font-size: 16px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; font-style: italic;">"MoodAnalyzer helped me identify my anxiety triggers and build better coping strategies. The insights are incredible!"</p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="doodle-border sketchy-shadow" style="padding: 28px; transform: rotate(-1deg); transition: all 0.3s ease;" onmouseover="this.style.transform='rotate(0deg) scale(1.03)'" onmouseout="this.style.transform='rotate(-1deg) scale(1)'">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #34d399, #14b8a6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">👨</div>
+                        <div>
+                            <h5 class="doodle-font" style="font-size: 18px; font-weight: bold; color: #374151; margin: 0;">Mike R.</h5>
+                            <div style="color: #fbbf24; font-size: 16px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; font-style: italic;">"The gamification aspect keeps me motivated to track daily. I've maintained a 90-day streak and feel amazing!"</p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="doodle-border sketchy-shadow" style="padding: 28px; transform: rotate(0.5deg); transition: all 0.3s ease;" onmouseover="this.style.transform='rotate(0deg) scale(1.03)'" onmouseout="this.style.transform='rotate(0.5deg) scale(1)'">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(45deg, #fbbf24, #f97316); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">👩</div>
+                        <div>
+                            <h5 class="doodle-font" style="font-size: 18px; font-weight: bold; color: #374151; margin: 0;">Emma L.</h5>
+                            <div style="color: #fbbf24; font-size: 16px;">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p class="doodle-font" style="color: #6b7280; line-height: 1.6; font-style: italic;">"As a therapist, I recommend MoodAnalyzer to my clients. The data visualization helps our sessions tremendously."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced CTA Section -->
+    <section style="padding: 80px 0; text-align: center; background: linear-gradient(135deg, rgba(244, 114, 182, 0.1), rgba(168, 85, 247, 0.1));">
+        <div class="container">
+            <div style="max-width: 700px; margin: 0 auto;">
+                <h3 class="doodle-font" style="font-size: 52px; font-weight: bold; color: #374151; margin-bottom: 24px; transform: rotate(1deg); position: relative;">
+                    Ready to Transform Your Life? 🌈
+                    <span style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%) rotate(-1deg); width: 80%; height: 5px; background: repeating-linear-gradient(45deg, #f472b6, #f472b6 4px, transparent 4px, transparent 8px); border-radius: 3px;"></span>
+                </h3>
+                <p class="doodle-font" style="font-size: 22px; color: #6b7280; margin-bottom: 40px; line-height: 1.6;">
+                    Join over 50,000 users who are already tracking their way to better mental health and emotional wellness!
+                </p>
+
+                <!-- Enhanced CTA Buttons -->
+                <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
+                    <button onclick="openSignupModal()" class="doodle-btn doodle-font sketchy-shadow sparkle" style="background: linear-gradient(45deg, #a855f7, #f472b6); color: white; padding: 20px 40px; border-radius: 50px; font-weight: bold; font-size: 20px; transform: rotate(-2deg); position: relative;" onmouseover="this.style.transform='rotate(0deg) scale(1.1)'" onmouseout="this.style.transform='rotate(-2deg) scale(1)'">
+                        Sign Up Free Now! 🎉
+                        <span class="bounce-gentle" style="position: absolute; right: -35px; top: 50%; transform: translateY(-50%) rotate(15deg); font-size: 28px; color: #fbbf24;">→</span>
+                    </button>
+                    <button class="doodle-btn doodle-font sketchy-shadow" style="background: rgba(255, 255, 255, 0.9); color: #374151; border: 3px dashed #f472b6; padding: 20px 40px; border-radius: 50px; font-weight: bold; font-size: 18px; transform: rotate(1deg);" onmouseover="this.style.transform='rotate(0deg) scale(1.05)'; this.style.background='rgba(244, 114, 182, 0.1)'" onmouseout="this.style.transform='rotate(1deg) scale(1)'; this.style.background='rgba(255, 255, 255, 0.9)'">
+                        Try Demo First 📱
+                    </button>
+                </div>
+
+                <!-- Trust Indicators -->
+                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: 0.8;">
+                    <div class="doodle-font" style="display: flex; align-items: center; gap: 8px; color: #6b7280;">
+                        <span style="font-size: 20px;">🔒</span>
+                        <span>100% Private</span>
+                    </div>
+                    <div class="doodle-font" style="display: flex; align-items: center; gap: 8px; color: #6b7280;">
+                        <span style="font-size: 20px;">📱</span>
+                        <span>iOS & Android</span>
+                    </div>
+                    <div class="doodle-font" style="display: flex; align-items: center; gap: 8px; color: #6b7280;">
+                        <span style="font-size: 20px;">💝</span>
+                        <span>Free Forever</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Footer -->
+    <footer style="background: linear-gradient(135deg, #374151, #1f2937); color: white; padding: 60px 0 30px; margin-top: 80px; position: relative;">
+        <!-- Decorative top border -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: repeating-linear-gradient(90deg, #a855f7, #a855f7 15px, #f472b6 15px, #f472b6 30px, #fbbf24 30px, #fbbf24 45px, #34d399 45px, #34d399 60px);"></div>
+        
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+                <!-- Brand Section -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                        <div class="doodle-circle pulse-glow" style="width: 40px; height: 40px; background: linear-gradient(45deg, #f472b6, #a855f7); display: flex; align-items: center; justify-content: center;">
+                            <span class="wiggle" style="font-size: 24px;">😊</span>
+                        </div>
+                        <span class="doodle-font" style="font-size: 24px; font-weight: bold;">MoodAnalyzer</span>
+                    </div>
+                    <p class="doodle-font" style="color: #9ca3af; line-height: 1.6; margin-bottom: 20px;">
+                        Empowering better mental health through intelligent mood tracking and personalized insights.
+                    </p>
+                    <div style="display: flex; gap: 16px;">
+                        <button class="doodle-btn" style="background: rgba(244, 114, 182, 0.2); color: #f472b6; padding: 8px; border-radius: 50%; font-size: 20px;" onmouseover="this.style.background='rgba(244, 114, 182, 0.3)'" onmouseout="this.style.background='rgba(244, 114, 182, 0.2)'">📧</button>
+                        <button class="doodle-btn" style="background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 8px; border-radius: 50%; font-size: 20px;" onmouseover="this.style.background='rgba(168, 85, 247, 0.3)'" onmouseout="this.style.background='rgba(168, 85, 247, 0.2)'">🐦</button>
+                        <button class="doodle-btn" style="background: rgba(52, 211, 153, 0.2); color: #34d399; padding: 8px; border-radius: 50%; font-size: 20px;" onmouseover="this.style.background='rgba(52, 211, 153, 0.3)'" onmouseout="this.style.background='rgba(52, 211, 153, 0.2)'">💼</button>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h5 class="doodle-font" style="font-size: 18px; font-weight: bold; margin-bottom: 16px; color: #f9fafb;">Quick Links</h5>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <a href="#features" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">Features</a>
+                        <a href="#how-it-works" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">How It Works</a>
+                        <a href="#developer" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">About Developer</a>
+                        <a href="#" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">Privacy Policy</a>
+                    </div>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h5 class="doodle-font" style="font-size: 18px; font-weight: bold; margin-bottom: 16px; color: #f9fafb;">Support</h5>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <a href="#" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">Help Center</a>
+                        <a href="#" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">Contact Us</a>
+                        <a href="#" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">Community</a>
+                        <a href="#" class="doodle-font" style="color: #9ca3af; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#f472b6'" onmouseout="this.style.color='#9ca3af'">Bug Reports</a>
+                    </div>
+                </div>
+
+                <!-- Download -->
+                <div>
+                    <h5 class="doodle-font" style="font-size: 18px; font-weight: bold; margin-bottom: 16px; color: #f9fafb;">Download App</h5>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="doodle-btn doodle-font sketchy-shadow" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 12px 16px; border-radius: 12px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
+                            <span style="font-size: 24px;">📱</span>
+                            <div>
+                                <div style="font-size: 14px; font-weight: bold;">App Store</div>
+                                <div style="font-size: 12px; opacity: 0.8;">Download for iOS</div>
+                            </div>
+                        </button>
+                        <button class="doodle-btn doodle-font sketchy-shadow" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 12px 16px; border-radius: 12px; font-weight: 600; text-align: left; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
+                            <span style="font-size: 24px;">🤖</span>
+                            <div>
+                                <div style="font-size: 14px; font-weight: bold;">Google Play</div>
+                                <div style="font-size: 12px; opacity: 0.8;">Download for Android</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 30px; text-align: center;">
+                <p class="doodle-font" style="color: #9ca3af; margin-bottom: 10px;">
+                    Made with 💜 by Alex Johnson | © 2024 MoodAnalyzer
+                </p>
+                <p style="color: #6b7280; font-size: 14px;">
+                    "Your ment
